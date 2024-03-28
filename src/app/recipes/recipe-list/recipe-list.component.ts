@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Recipe } from '../recipe.model';
 
 @Component({
@@ -14,5 +14,12 @@ export class RecipeListComponent {
       'https://www.howtocook.recipes/wp-content/uploads/2021/05/Ratatouille-recipe-500x500.jpg'
     )
   ]
+  @Output() selectedRecipe = new EventEmitter<Recipe>()
+
+  onClickRecipe(recipe: Recipe) {
+    console.log('test on click recipe: ', recipe);
+    
+    this.selectedRecipe.emit(recipe)
+  }
 
 }
