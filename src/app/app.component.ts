@@ -1,14 +1,9 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
-  loadedFeature = 'recipe'  
-  
-  onNavigate(featureSelected: string) {
-    this.loadedFeature = featureSelected
-  }
-}
+export class AppComponent {}
