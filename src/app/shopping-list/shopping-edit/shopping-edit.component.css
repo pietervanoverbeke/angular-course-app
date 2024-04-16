@@ -1,0 +1,7 @@
+input.ng-invalid.ng-touched {
+    border: solid 1px red;
+}
+
+.btn-spacer button {
+    margin-right: 0.5rem;
+}

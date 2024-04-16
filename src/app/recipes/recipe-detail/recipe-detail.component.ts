@@ -30,4 +30,9 @@ export class RecipeDetailComponent implements OnInit {
   onClickToShoppingList() {
     this.shoppingListService.addIngredients(this.recipe.ingredients)
   }
+
+  onDeleteRecipe() {
+    this.recipeService.deleteRecipe(this.id)
+    this.router.navigate(['../'], { relativeTo: this.route })
+  }
 }
