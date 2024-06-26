@@ -3,6 +3,9 @@ import { Ingredient } from '../../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list.service';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { addIngredient, deleteIngredient, stopEdit, updateIngredient } from '../store/shopping-list.actions';
+import * as fromShoppingList from '../store/shopping-list.reducer'
 
 @Component({
   selector: 'app-shopping-edit',
@@ -16,7 +19,10 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   editedItemIndex: number
   editedItem: Ingredient
 
-  constructor(private shoppingListService: ShoppingListService) {}
+  constructor(
+    private shoppingListService: ShoppingListService, 
+    private store: Store<fromShoppingList.AppState>
+  ) {}
 
   ngOnInit(): void {
     this.subscription = this.shoppingListService.startedEditing.subscribe((index: number) => {
@@ -32,6 +38,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe()
+    this.store.dispatch(stopEdit())
   }
 
   onSubmit() {
@@ -40,26 +47,29 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
       +this.form.value.amount
     )
     if (this.editMode && this.form.valid) {
-      this.shoppingListService.updateIngredient(this.editedItemIndex, newIngredient)
+      this.store.dispatch(updateIngredient({ index: this.editedItemIndex, ingredient: newIngredient }))
+      // this.shoppingListService.updateIngredient(this.editedItemIndex, newIngredient)
       this.onClear()
       return
     }
     if (this.form.valid) {
-      this.shoppingListService.addIngredient(
-        newIngredient
-      )
+      this.store.dispatch(addIngredient({ingredient: newIngredient}))
+      // this.shoppingListService.addIngredient(
+      //   newIngredient
+      // )
     }
   }
 
   onDelete() {
-    this.shoppingListService.deleteIngredient(this.editedItemIndex)
+    this.store.dispatch(deleteIngredient({ index: this.editedItemIndex }))
+    // this.shoppingListService.deleteIngredient(this.editedItemIndex)
     this.onClear()
   }
 
   onClear() {
     this.form.reset()
     this.editMode = false
-    this.editedItem = null
+    this.store.dispatch(stopEdit())
   }
 
   //BEFORE FORMS
